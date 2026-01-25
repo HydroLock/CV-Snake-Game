@@ -1,0 +1,8 @@
+results/
+__pycache__/
+*.ckpt
+*.pt
+*.onnx
+*.zip
+*.log
+.env
