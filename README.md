@@ -21,7 +21,7 @@ If you are the creator of the original demonstration and would like to be credit
 - 🎥 Real-time webcam-based control
 - ✋ Hand tracking using MediaPipe
 - ↔️ Swipe-based directional controls
-- ⚡ Pinch gesture activates a temporary speed boost
+- ⚡ By making a fist, a temporary speed boost is activated
 - 🧵 Multi-threaded architecture for smoother gameplay
 - 🎮 Classic Snake gameplay rendered using Pygame
 - 📹 Live webcam preview with hand landmarks and gesture feedback
@@ -47,9 +47,9 @@ To improve stability, a short gesture cooldown is applied after every recognized
 
 ### Speed Boost
 
-The distance between the thumb tip and index finger is monitored.
+The fingers that are folded to form a fist is monitored, which should include all 5 fingers.
 
-When both fingertips come close together (a pinch gesture), the game temporarily increases the snake's movement speed.
+When a fist is formed and detected by the camera, the game temporarily increases the snake's movement speed.
 
 ### Game Loop
 
@@ -107,7 +107,7 @@ Responsible for:
 
 - Hand landmark detection
 - Swipe gesture recognition
-- Pinch detection for speed boost
+- Folded fingers detection for speed boost
 - Gesture cooldown handling
 - Webcam visualization
 
@@ -157,7 +157,7 @@ Ensure that your webcam is connected and accessible before launching the applica
 | Swipe Right | Move Right |
 | Swipe Up | Move Up |
 | Swipe Down | Move Down |
-| Pinch (Thumb + Index Finger) | Speed Boost |
+| Form a fist | Speed Boost |
 | ESC | Exit Game |
 
 ---
