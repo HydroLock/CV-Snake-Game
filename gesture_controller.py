@@ -138,6 +138,8 @@ class GestureController:
                     ring_folded and
                     pinky_folded
                 )
+
+                self.previous_position = current_pos
         
         # Update cooldown
         if self.gesture_cooldown > 0:
