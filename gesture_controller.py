@@ -105,22 +105,39 @@ class GestureController:
                             self.current_direction = direction
                             self.gesture_cooldown = self.max_cooldown
                 
-                # Detect pinch gesture (thumb and index finger close)
-                thumb_tip = hand_landmarks.landmark[self.mp_hands.HandLandmark.THUMB_TIP]
-                index_tip = hand_landmarks.landmark[self.mp_hands.HandLandmark.INDEX_FINGER_TIP]
+                # Detect pinch gesture (Making a fist by counting folded fingers)
+                index_folded = (
+                    hand_landmarks.landmark[self.mp_hands.HandLandmark.INDEX_FINGER_TIP].y >
+                    hand_landmarks.landmark[self.mp_hands.HandLandmark.INDEX_FINGER_PIP].y
+                )
+
+                middle_folded = (
+                    hand_landmarks.landmark[self.mp_hands.HandLandmark.MIDDLE_FINGER_TIP].y >
+                    hand_landmarks.landmark[self.mp_hands.HandLandmark.MIDDLE_FINGER_PIP].y
+                )
+
+                ring_folded = (
+                    hand_landmarks.landmark[self.mp_hands.HandLandmark.RING_FINGER_TIP].y >
+                    hand_landmarks.landmark[self.mp_hands.HandLandmark.RING_FINGER_PIP].y
+                )
+
+                pinky_folded = (
+                    hand_landmarks.landmark[self.mp_hands.HandLandmark.PINKY_TIP].y >
+                    hand_landmarks.landmark[self.mp_hands.HandLandmark.PINKY_PIP].y
+                )
+
+                thumb_folded = (
+                    hand_landmarks.landmark[self.mp_hands.HandLandmark.THUMB_TIP].x <
+                    hand_landmarks.landmark[self.mp_hands.HandLandmark.THUMB_IP].x
+                )
                 
-                thumb_pos = np.array([thumb_tip.x, thumb_tip.y])
-                index_pos = np.array([index_tip.x, index_tip.y])
-                
-                distance = np.linalg.norm(thumb_pos - index_pos)
-                is_pinching = distance < 0.05
-                
-                # Draw pinch indicator
-                if is_pinching:
-                    cv2.putText(annotated_frame, "SPEED BOOST!", (10, 30), 
-                              cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
-                
-                self.previous_position = current_pos
+                # Draw fist indicator
+                is_fist = (
+                    index_folded and
+                    middle_folded and
+                    ring_folded and
+                    pinky_folded
+                )
         
         # Update cooldown
         if self.gesture_cooldown > 0:
@@ -131,7 +148,7 @@ class GestureController:
             cv2.putText(annotated_frame, f"Direction: {self.current_direction}", 
                        (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
         
-        return self.current_direction, is_pinching, annotated_frame
+        return self.current_direction, is_fist, annotated_frame
     
     def reset_gesture_state(self):
         """Reset gesture detection state"""
